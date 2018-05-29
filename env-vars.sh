@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOCKER_MANTAINER_NAME=lnlscon
+DOCKER_MANTAINER_NAME=lnlssol
 DOCKER_NAME=epics-archiver-generic
 DOCKER_RUN_NAME=epics-archiver-generic
 DOCKER_TAG=latest
