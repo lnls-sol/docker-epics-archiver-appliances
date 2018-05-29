@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ./env-vars-specific.sh
+. ./env-vars-single.sh
 
 for APPLIANCE in "engine" "retrieval" "etl" "mgmt" 
 do
