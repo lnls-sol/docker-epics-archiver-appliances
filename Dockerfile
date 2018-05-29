@@ -37,8 +37,8 @@ RUN mkdir /usr/local/epics
 RUN ln -s /usr/lib/epics /usr/local/epics/base
 
 # Github repository variables
-ENV GITHUB_REPOSITORY_FOLDER /opt/epicsarchiverap-ldap
-ENV GITHUB_REPOSITORY_URL https://github.com/lnls-sirius/epicsarchiverap-ldap.git
+ENV GITHUB_REPOSITORY_FOLDER /opt/epicsarchiverap
+ENV GITHUB_REPOSITORY_URL https://github.com/slacmshankar/epicsarchiverap
 
 # Clone archiver github's repository
 RUN git clone ${GITHUB_REPOSITORY_URL} ${GITHUB_REPOSITORY_FOLDER}
