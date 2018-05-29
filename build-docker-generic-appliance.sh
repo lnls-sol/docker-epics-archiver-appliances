@@ -3,6 +3,8 @@
 #
 # A simple script to build a base image for the appliance containers.
 #
+# Gabriel Fedel 
+# Beamlines Control Group - Brazilian Synchrotron Light Source Laboratory - LNLS
 # Gustavo Ciotto Pinton
 # Controls Group - Brazilian Synchrotron Light Source Laboratory - LNLS
 #
