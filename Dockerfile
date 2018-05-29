@@ -2,6 +2,8 @@
 # Docker image for a general EPICS Archiver Appliance. It consists of 
 # the base image for the mgmt, etl, engine and retrieval Docker containers.
 # 
+# Gabriel Fedel 
+# Beamlines Control Group - Brazilian Synchrotron Light Source Laboratory - LNLS
 # Gustavo Ciotto Pinton
 # LNLS - Brazilian Synchrotron Light Source
 # Controls Group
@@ -10,7 +12,7 @@
 
 FROM tomcat:9
 
-MAINTAINER Gustavo Ciotto
+MAINTAINER  Gabriel Fedel
 
 # User root is required to install all needed packages
 USER root
