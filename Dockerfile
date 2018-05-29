@@ -17,36 +17,23 @@ MAINTAINER  Gabriel Fedel
 # User root is required to install all needed packages
 USER root
 
-# Updates default image and install required packages
-RUN apt-get -y update && \
- apt-get install -y ant gcc git g++ libreadline-dev make openjdk-8-jdk perl tar xmlstarlet wget && \
- rm -rf /var/lib/apt/lists/*
-
 ENV APPLIANCE_NAME epics-archiver-appliances
 ENV APPLIANCE_FOLDER /opt/${APPLIANCE_NAME}
 
 RUN mkdir -p ${APPLIANCE_FOLDER}/build/scripts
 
 # General EPICS Archiver Appliance Setup
-ENV ARCHAPPL_SITEID lnls-control-archiver
-
-# EPICS environment variables
-ENV EPICS_BASE_VERSION 3.15.5
-ENV EPICS_BASE_TAR_NAME base-${EPICS_BASE_VERSION}
-ENV EPICS_BASE_NAME base-${EPICS_BASE_VERSION}
-ENV EPICS_BASE_URL https://epics.anl.gov/download/base/${EPICS_BASE_TAR_NAME}.tar.gz
-ENV EPICS_INSTALL_DIR /opt
-
-ENV EPICS_HOST_ARCH linux-x86_64
-ENV EPICS_INSTALL_DIR /opt/base-3.14.12.6/bin/${EPICS_HOST_ARCH}
-ENV EPICS_BASE ${EPICS_INSTALL_DIR}/${EPICS_BASE_NAME}
-ENV PATH ${EPICS_INSTALL_DIR}/${EPICS_BASE_NAME}/bin/${EPICS_HOST_ARCH}:$PATH
-
-COPY setup-epics.sh \
-     ${APPLIANCE_FOLDER}/build/scripts/
 
 # Install EPICS base
-RUN ${APPLIANCE_FOLDER}/build/scripts/setup-epics.sh
+RUN apt-get update && apt-get install -y git libreadline7 libreadline-dev libtinfo-dev readline-common openjdk-8-jdk perl tar xmlstarlet wget ant && rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/lnls-sol/epics-base_debs
+# ignore epics-perl (this package have some problems)
+RUN rm epics-base_debs/debs/epics-perl_3.15.3-13_amd64.deb
+RUN dpkg -i epics-base_debs/debs/*.deb
+RUN rm -rf epics-base_debs
+RUN mkdir /usr/local/epics
+RUN ln -s /usr/lib/epics /usr/local/epics/base
 
 # Github repository variables
 ENV GITHUB_REPOSITORY_FOLDER /opt/epicsarchiverap-ldap
