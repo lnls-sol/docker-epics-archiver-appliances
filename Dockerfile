@@ -43,6 +43,14 @@ ENV GITHUB_REPOSITORY_URL https://github.com/slacmshankar/epicsarchiverap
 # Clone archiver github's repository
 RUN git clone ${GITHUB_REPOSITORY_URL} ${GITHUB_REPOSITORY_FOLDER}
 
+# add configuration files 
+RUN mkdir -p ${GITHUB_REPOSITORY_FOLDER}/src/sitespecific/${ARCHAPPL_SITEID}/classpathfiles
+RUN cp ${GITHUB_REPOSITORY_FOLDER}/src/sitespecific/slacdev/classpathfiles/archappl.properties  ${GITHUB_REPOSITORY_FOLDER}/src/sitespecific/${ARCHAPPL_SITEID}/classpathfiles
+
+COPY lnls_appliances.xml ${GITHUB_REPOSITORY_FOLDER}/src/sitespecific/${ARCHAPPL_SITEID}/classpathfiles/appliances.xml
+
+COPY lnls_policies.py ${GITHUB_REPOSITORY_FOLDER}/src/sitespecific/${ARCHAPPL_SITEID}/classpathfiles/policies.py
+
 RUN mkdir -p ${APPLIANCE_FOLDER}/build/bin
 
 ### Set up mysql connector
