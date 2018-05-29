@@ -3,6 +3,8 @@
 #
 # A simple bash script to build four different Docker images: one for each EPICS Archiver Appliance
 #
+# Gabriel Fedel 
+# Beamlines Control Group - Brazilian Synchrotron Light Source Laboratory - LNLS
 # Gustavo Ciotto Pinton
 # LNLS - Brazilian Synchrotron Light Source
 # Controls Group
