@@ -23,6 +23,7 @@ ENV APPLIANCE_FOLDER /opt/${APPLIANCE_NAME}
 RUN mkdir -p ${APPLIANCE_FOLDER}/build/scripts
 
 # General EPICS Archiver Appliance Setup
+ENV ARCHAPPL_SITEID lnls-sol-archiver
 
 # Install EPICS base
 RUN apt-get update && apt-get install -y git libreadline7 libreadline-dev libtinfo-dev readline-common openjdk-8-jdk perl tar xmlstarlet wget ant && rm -rf /var/lib/apt/lists/*
