@@ -3,14 +3,16 @@
 # arguments: the first is the name of the appliance this image will belong to and
 # the second is the name of the appliance (mgmt, retrieval, etl or engine).
 # 
+# Gabriel Fedel 
+# Beamlines Control Group - Brazilian Synchrotron Light Source Laboratory - LNLS
 # Gustavo Ciotto Pinton
 # LNLS - Brazilian Synchrotron Light Source
 # Controls Group
 #
 
-FROM lnlscon/epics-archiver-generic:latest
+FROM lnlssol/epics-archiver-generic:latest
 
-MAINTAINER Gustavo Ciotto
+MAINTAINER Gabriel Fedel
 
 # user root is required to install all needed packages
 USER root
