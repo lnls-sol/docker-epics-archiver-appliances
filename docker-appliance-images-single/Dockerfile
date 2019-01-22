@@ -32,4 +32,6 @@ COPY configuration/context.xml \
 
 RUN mkdir ${APPLIANCE_FOLDER}/build/cert/
 
+RUN apt-get update && apt-get install vim -y
+
 CMD ["sh", "-c", "${APPLIANCE_FOLDER}/build/scripts/tomcat-service.sh"]

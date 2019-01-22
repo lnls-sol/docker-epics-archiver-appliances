@@ -1,5 +1,5 @@
 <appliances><appliance>
-     <identity>lnls_control_appliance_1</identity>
+     <identity>lnls_sol_appliance_1</identity>
      <cluster_inetport>192.168.5.5:12000</cluster_inetport>
      <mgmt_url>https://192.168.5.5:11995/mgmt/bpl</mgmt_url>
      <engine_url>http://192.168.5.7:11996/engine/bpl</engine_url>

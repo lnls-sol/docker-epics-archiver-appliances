@@ -8,6 +8,8 @@ DOCKER_TAG=latest
 
 NETWORK_ID=epics-archiver-network
 
+USE_AUTHENTICATION=true
+
 APPLIANCE_STORAGE_FOLDER=/opt/epics-archiver-appliances/storage
 
 SHORT_TERM_VOLUME_FOLDER=${APPLIANCE_STORAGE_FOLDER}/sts:${APPLIANCE_STORAGE_FOLDER}/sts
@@ -19,4 +21,4 @@ MEDIUM_TERM_VOLUME_NAME=epics-archiver-storage-mts
 LONG_TERM_VOLUME_FOLDER=${APPLIANCE_STORAGE_FOLDER}/lts:${APPLIANCE_STORAGE_FOLDER}/lts
 LONG_TERM_VOLUME_NAME=epics-archiver-storage-lts
 
-ARCHAPPL_MYIDENTITY=lnls_control_appliance_1
+ARCHAPPL_MYIDENTITY=lnls_sol_appliance_1

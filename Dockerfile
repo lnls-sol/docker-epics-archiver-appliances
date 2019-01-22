@@ -38,10 +38,13 @@ RUN ln -s /usr/lib/epics /usr/local/epics/base
 
 # Github repository variables
 ENV GITHUB_REPOSITORY_FOLDER /opt/epicsarchiverap
-ENV GITHUB_REPOSITORY_URL https://github.com/slacmshankar/epicsarchiverap
+#ENV GITHUB_REPOSITORY_URL https://github.com/lnls-sol/epicsarchiverap
 
 # Clone archiver github's repository
-RUN git clone ${GITHUB_REPOSITORY_URL} ${GITHUB_REPOSITORY_FOLDER}
+#RUN git clone ${GITHUB_REPOSITORY_URL} ${GITHUB_REPOSITORY_FOLDER}
+
+#this is temporary. It is more fast then use git clone
+COPY epicsarchiverap ${GITHUB_REPOSITORY_FOLDER}
 
 # add configuration files 
 RUN mkdir -p ${GITHUB_REPOSITORY_FOLDER}/src/sitespecific/${ARCHAPPL_SITEID}/classpathfiles
