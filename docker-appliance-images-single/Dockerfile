@@ -17,6 +17,8 @@ MAINTAINER Gabriel Fedel
 # user root is required to install all needed packages
 USER root
 
+RUN apt-get update && apt-get install vim -y
+
 ENV APPLIANCE_NAME epics-archiver-appliances
 
 ENV APPLIANCE_FOLDER /opt/${APPLIANCE_NAME}
@@ -32,6 +34,5 @@ COPY configuration/context.xml \
 
 RUN mkdir ${APPLIANCE_FOLDER}/build/cert/
 
-RUN apt-get update && apt-get install vim -y
 
 CMD ["sh", "-c", "${APPLIANCE_FOLDER}/build/scripts/tomcat-service.sh"]

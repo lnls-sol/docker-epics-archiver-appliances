@@ -12,7 +12,7 @@ CONTAINERS=$(docker ps -a | grep ${DOCKER_RUN_NAME})
 
     APPLIANCE_PORT_MGMT=11995
     APPLIANCE_PORT_RET=11998
-    docker run -d --name=${DOCKER_RUN_NAME} --dns=10.0.0.71 --dns=10.0.0.72 \
+    docker run -d --name=${DOCKER_RUN_NAME} \
         -p ${APPLIANCE_PORT_MGMT}:${APPLIANCE_PORT_MGMT} -p ${APPLIANCE_PORT_RET}:${APPLIANCE_PORT_RET} --network=${NETWORK_ID} \
         --volumes-from=${SHORT_TERM_VOLUME_NAME} --volumes-from=${MEDIUM_TERM_VOLUME_NAME} --volumes-from=${LONG_TERM_VOLUME_NAME} \
         -v /opt/epics-archiver-appliances/configuration/:/opt/epics-archiver-appliances/configuration/ \

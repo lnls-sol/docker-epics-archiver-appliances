@@ -1,4 +1,4 @@
-#
+
 # Docker image for a general EPICS Archiver Appliance. It consists of 
 # the base image for the mgmt, etl, engine and retrieval Docker containers.
 # 
@@ -25,16 +25,26 @@ RUN mkdir -p ${APPLIANCE_FOLDER}/build/scripts
 # General EPICS Archiver Appliance Setup
 ENV ARCHAPPL_SITEID lnls-sol-archiver
 
-# Install EPICS base
-RUN apt-get update && apt-get install -y git libreadline7 libreadline-dev libtinfo-dev readline-common openjdk-8-jdk perl tar xmlstarlet wget ant && rm -rf /var/lib/apt/lists/*
+# Used packages
+RUN apt-get update
+RUN apt-get install -y git libreadline7 libtinfo-dev readline-common openjdk-8-jdk perl tar xmlstarlet wget ant
 
-RUN git clone https://github.com/lnls-sol/epics-base_debs
-# ignore epics-perl (this package have some problems)
-RUN rm epics-base_debs/debs/epics-perl_3.15.3-13_amd64.deb
-RUN dpkg -i epics-base_debs/debs/*.deb
-RUN rm -rf epics-base_debs
-RUN mkdir /usr/local/epics
-RUN ln -s /usr/lib/epics /usr/local/epics/base
+# Install EPICS base
+RUN apt-get update
+RUN apt-get install wget make gcc g++ perl-modules-5.26 libreadline-dev -y
+
+WORKDIR /tmp
+COPY install.sh ./
+RUN chmod +x install.sh
+RUN ./install.sh
+
+COPY epics.sh /etc/profile.d/
+RUN chmod +x /etc/profile.d/epics.sh
+RUN echo ". /etc/profile.d/epics.sh" >> /etc/bash.bashrc
+
+#RUN rm epics.sh
+RUN rm install.sh
+
 
 # Github repository variables
 ENV GITHUB_REPOSITORY_FOLDER /opt/epicsarchiverap
@@ -57,13 +67,13 @@ COPY lnls_policies.py ${GITHUB_REPOSITORY_FOLDER}/src/sitespecific/${ARCHAPPL_SI
 RUN mkdir -p ${APPLIANCE_FOLDER}/build/bin
 
 ### Set up mysql connector
-ENV MYSQL_CONNECTOR mysql-connector-java-5.1.41
+ENV MYSQL_CONNECTOR mysql-connector-java-8.0.14
 
 RUN wget -P ${APPLIANCE_FOLDER}/build/bin https://dev.mysql.com/get/Downloads/Connector-J/${MYSQL_CONNECTOR}.tar.gz
 
 RUN tar -C ${APPLIANCE_FOLDER}/build/bin -xvf ${APPLIANCE_FOLDER}/build/bin/${MYSQL_CONNECTOR}.tar.gz
 
-RUN cp ${APPLIANCE_FOLDER}/build/bin/${MYSQL_CONNECTOR}/${MYSQL_CONNECTOR}-bin.jar ${CATALINA_HOME}/lib
+RUN cp ${APPLIANCE_FOLDER}/build/bin/${MYSQL_CONNECTOR}/${MYSQL_CONNECTOR}.jar ${CATALINA_HOME}/lib
 
 RUN rm -R ${APPLIANCE_FOLDER}/build/bin/${MYSQL_CONNECTOR}/
 
@@ -86,4 +96,6 @@ RUN mkdir -p ${ARCHAPPL_LONG_TERM_FOLDER}
 RUN mkdir -p ${APPLIANCE_FOLDER}/build/configuration/wait-for-it
 RUN git clone https://github.com/vishnubob/wait-for-it.git ${APPLIANCE_FOLDER}/build/configuration/wait-for-it
 
+# clean
+RUN rm -rf /var/lib/apt/lists/*
 

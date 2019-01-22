@@ -6,7 +6,7 @@ DOCKER_RUN_NAME=epics-archiver-generic
 DOCKER_TAG=latest
 
 MYSQL_USER=lnls_user
-MYSQL_PASSWORD=controle
+MYSQL_PASSWORD=sol
 MYSQL_DATABASE=lnls_archiver_db
 MYSQL_PORT=3306
 
