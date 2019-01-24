@@ -10,7 +10,7 @@
 #
 #
 
-FROM tomcat:9
+FROM tomcat:9-jre8
 
 MAINTAINER  Gabriel Fedel
 
@@ -31,7 +31,7 @@ RUN apt-get install -y git libreadline7 libtinfo-dev readline-common openjdk-8-j
 
 # Install EPICS base
 RUN apt-get update
-RUN apt-get install wget make gcc g++ perl-modules-5.26 libreadline-dev -y
+RUN apt-get install wget make gcc g++ perl-modules-5.24 libreadline-dev -y
 
 WORKDIR /tmp
 COPY install.sh ./
