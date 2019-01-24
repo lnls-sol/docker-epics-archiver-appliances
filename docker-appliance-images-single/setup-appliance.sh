@@ -16,7 +16,7 @@ sed -i 's/url=.*$/url=\"jdbc:mysql:\/\/'"${MYSQL_SQL_ADDRESS}"':'"${MYSQL_PORT}"
 # Before starting Tomcat service, change all addresses in lnls_appliances.xml.
 # Get local ip address
 #IP_ADDRESS=$(ip addr show eth0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
-IP_ADDRESS=$(hostname)
+IP_ADDRESS=$(hostname).abtlus.org.br
 
 # For debugging
 # sed -i "s:INFO:ALL:g" ${GITHUB_REPOSITORY_FOLDER}/src/sitespecific/lnls-control-archiver/classpathfiles/log4j.properties

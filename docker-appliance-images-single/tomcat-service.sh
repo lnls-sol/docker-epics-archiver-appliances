@@ -11,7 +11,7 @@ set -u
 
 # Waits for MySQL database to start
 chmod +x ${APPLIANCE_FOLDER}/build/configuration/wait-for-it/wait-for-it.sh
-${APPLIANCE_FOLDER}/build/configuration/wait-for-it/wait-for-it.sh epics-archiver-mysql-db:3306
+${APPLIANCE_FOLDER}/build/configuration/wait-for-it/wait-for-it.sh localhost:3306
 
 # Setup all appliances
 ${APPLIANCE_FOLDER}/build/scripts/setup-appliance.sh
