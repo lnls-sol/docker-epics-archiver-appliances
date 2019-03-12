@@ -22,4 +22,6 @@ do
     ${CATALINA_HOME}/bin/catalina.sh start
 done
 
+service apache2 restart
+
 tail -f /dev/null

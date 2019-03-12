@@ -34,5 +34,10 @@ COPY configuration/context.xml \
 
 RUN mkdir ${APPLIANCE_FOLDER}/build/cert/
 
+# configure apache as a proxy and point to archiver appliance
+RUN apt install apache2 -y
+RUN a2enmod proxy
+RUN a2enmod proxy_http
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 
 CMD ["sh", "-c", "${APPLIANCE_FOLDER}/build/scripts/tomcat-service.sh"]
