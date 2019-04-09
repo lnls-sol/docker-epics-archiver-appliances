@@ -1,24 +1,21 @@
-#
+
 # Docker image for a general EPICS Archiver Appliance. It consists of 
 # the base image for the mgmt, etl, engine and retrieval Docker containers.
 # 
+# Gabriel Fedel 
+# Beamlines Control Group - Brazilian Synchrotron Light Source Laboratory - LNLS
 # Gustavo Ciotto Pinton
 # LNLS - Brazilian Synchrotron Light Source
 # Controls Group
 #
 #
 
-FROM tomcat:9
+FROM tomcat:9-jre8
 
-MAINTAINER Gustavo Ciotto
+MAINTAINER  Gabriel Fedel
 
 # User root is required to install all needed packages
 USER root
-
-# Updates default image and install required packages
-RUN apt-get -y update && \
- apt-get install -y ant gcc git g++ libreadline-dev make openjdk-8-jdk perl tar xmlstarlet wget && \
- rm -rf /var/lib/apt/lists/*
 
 ENV APPLIANCE_NAME epics-archiver-appliances
 ENV APPLIANCE_FOLDER /opt/${APPLIANCE_NAME}
@@ -26,43 +23,57 @@ ENV APPLIANCE_FOLDER /opt/${APPLIANCE_NAME}
 RUN mkdir -p ${APPLIANCE_FOLDER}/build/scripts
 
 # General EPICS Archiver Appliance Setup
-ENV ARCHAPPL_SITEID lnls-control-archiver
+ENV ARCHAPPL_SITEID lnls-sol-archiver
 
-# EPICS environment variables
-ENV EPICS_BASE_VERSION 3.15.5
-ENV EPICS_BASE_TAR_NAME base-${EPICS_BASE_VERSION}
-ENV EPICS_BASE_NAME base-${EPICS_BASE_VERSION}
-ENV EPICS_BASE_URL https://epics.anl.gov/download/base/${EPICS_BASE_TAR_NAME}.tar.gz
-ENV EPICS_INSTALL_DIR /opt
-
-ENV EPICS_HOST_ARCH linux-x86_64
-ENV EPICS_INSTALL_DIR /opt/base-3.14.12.6/bin/${EPICS_HOST_ARCH}
-ENV EPICS_BASE ${EPICS_INSTALL_DIR}/${EPICS_BASE_NAME}
-ENV PATH ${EPICS_INSTALL_DIR}/${EPICS_BASE_NAME}/bin/${EPICS_HOST_ARCH}:$PATH
-
-COPY setup-epics.sh \
-     ${APPLIANCE_FOLDER}/build/scripts/
+# Used packages
+RUN apt-get update
+RUN apt-get install -y git libreadline7 libtinfo-dev readline-common openjdk-8-jdk perl tar xmlstarlet wget ant
 
 # Install EPICS base
-RUN ${APPLIANCE_FOLDER}/build/scripts/setup-epics.sh
+RUN apt-get update
+RUN apt-get install wget make gcc g++ perl-modules-5.24 libreadline-dev -y
+
+WORKDIR /tmp
+COPY install.sh ./
+RUN chmod +x install.sh
+RUN ./install.sh
+
+COPY epics.sh /etc/profile.d/
+RUN chmod +x /etc/profile.d/epics.sh
+RUN echo ". /etc/profile.d/epics.sh" >> /etc/bash.bashrc
+
+#RUN rm epics.sh
+RUN rm install.sh
+
 
 # Github repository variables
-ENV GITHUB_REPOSITORY_FOLDER /opt/epicsarchiverap-ldap
-ENV GITHUB_REPOSITORY_URL https://github.com/lnls-sirius/epicsarchiverap-ldap.git
+ENV GITHUB_REPOSITORY_FOLDER /opt/epicsarchiverap
+#ENV GITHUB_REPOSITORY_URL https://github.com/lnls-sol/epicsarchiverap
 
 # Clone archiver github's repository
-RUN git clone ${GITHUB_REPOSITORY_URL} ${GITHUB_REPOSITORY_FOLDER}
+#RUN git clone ${GITHUB_REPOSITORY_URL} ${GITHUB_REPOSITORY_FOLDER}
+
+#this is temporary. It is more fast then use git clone
+COPY epicsarchiverap ${GITHUB_REPOSITORY_FOLDER}
+
+# add configuration files 
+RUN mkdir -p ${GITHUB_REPOSITORY_FOLDER}/src/sitespecific/${ARCHAPPL_SITEID}/classpathfiles
+RUN cp ${GITHUB_REPOSITORY_FOLDER}/src/sitespecific/slacdev/classpathfiles/archappl.properties  ${GITHUB_REPOSITORY_FOLDER}/src/sitespecific/${ARCHAPPL_SITEID}/classpathfiles
+
+COPY lnls_appliances.xml ${GITHUB_REPOSITORY_FOLDER}/src/sitespecific/${ARCHAPPL_SITEID}/classpathfiles/appliances.xml
+
+COPY lnls_policies.py ${GITHUB_REPOSITORY_FOLDER}/src/sitespecific/${ARCHAPPL_SITEID}/classpathfiles/policies.py
 
 RUN mkdir -p ${APPLIANCE_FOLDER}/build/bin
 
 ### Set up mysql connector
-ENV MYSQL_CONNECTOR mysql-connector-java-5.1.41
+ENV MYSQL_CONNECTOR mysql-connector-java-8.0.14
 
 RUN wget -P ${APPLIANCE_FOLDER}/build/bin https://dev.mysql.com/get/Downloads/Connector-J/${MYSQL_CONNECTOR}.tar.gz
 
 RUN tar -C ${APPLIANCE_FOLDER}/build/bin -xvf ${APPLIANCE_FOLDER}/build/bin/${MYSQL_CONNECTOR}.tar.gz
 
-RUN cp ${APPLIANCE_FOLDER}/build/bin/${MYSQL_CONNECTOR}/${MYSQL_CONNECTOR}-bin.jar ${CATALINA_HOME}/lib
+RUN cp ${APPLIANCE_FOLDER}/build/bin/${MYSQL_CONNECTOR}/${MYSQL_CONNECTOR}.jar ${CATALINA_HOME}/lib
 
 RUN rm -R ${APPLIANCE_FOLDER}/build/bin/${MYSQL_CONNECTOR}/
 
@@ -85,4 +96,6 @@ RUN mkdir -p ${ARCHAPPL_LONG_TERM_FOLDER}
 RUN mkdir -p ${APPLIANCE_FOLDER}/build/configuration/wait-for-it
 RUN git clone https://github.com/vishnubob/wait-for-it.git ${APPLIANCE_FOLDER}/build/configuration/wait-for-it
 
+# clean
+RUN rm -rf /var/lib/apt/lists/*
 

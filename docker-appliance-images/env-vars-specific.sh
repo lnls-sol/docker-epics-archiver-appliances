@@ -19,4 +19,4 @@ MEDIUM_TERM_VOLUME_NAME=epics-archiver-storage-mts
 LONG_TERM_VOLUME_FOLDER=${APPLIANCE_STORAGE_FOLDER}/lts
 LONG_TERM_VOLUME_NAME=epics-archiver-storage-lts
 
-ARCHAPPL_MYIDENTITY=lnls_control_appliance_1
+ARCHAPPL_MYIDENTITY=lnls_sol_appliance_1
